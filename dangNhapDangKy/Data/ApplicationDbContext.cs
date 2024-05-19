@@ -10,6 +10,5 @@ namespace dangNhapDangKy.Data
             : base(options)
         {
         }
-        public DbSet<dangNhapDangKy.Models.Size> Size { get; set; } = default!;
     }
 }
