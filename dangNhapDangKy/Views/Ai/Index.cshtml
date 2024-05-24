@@ -119,8 +119,8 @@
             <div class="chat-message gpt">Xin chào, tôi có thể giúp gì cho bạn?</div>
         </div>
         <div class="chat-footer">
-            <textarea id="question" placeholder="Enter your request here..."></textarea>
-            <button id="send">Send</button>
+            <textarea id="question" placeholder="Hãy nhập câu hỏi ở đây..."></textarea>
+            <button id="send">Gửi</button>
         </div>
     </div>
 
@@ -135,7 +135,7 @@
         $(document).ready(function () {
             const storedContent = localStorage.getItem('fileContent');
             if (storedContent) {
-                console.log('Stored file content loaded.');
+                console.log('Đã tải nội dung file lưu trữ.');
             }
         });
 
@@ -154,7 +154,7 @@
                 if (storedContent) {
                     generateCompletion(storedContent);
                 } else {
-                    alert('Please upload a file first.');
+                    alert('Vui lòng tải lên một file trước.');
                 }
             }
         });
@@ -162,11 +162,11 @@
         async function generateCompletion(fileContent) {
             const question = $('#question').val();
             if (!question) {
-                alert('Please enter a question.');
+                alert('Vui lòng nhập câu hỏi.');
                 return;
             }
 
-            const content = `File Content: ${fileContent}\n\nQuestion: ${question}`;
+            const content = `Nội dung file: ${fileContent}\n\nCâu hỏi: ${question}`;
 
             addChatMessage('user', question);  // Add user's question to the chat
 

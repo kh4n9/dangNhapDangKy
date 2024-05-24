@@ -1,20 +1,20 @@
 ﻿@model dangNhapDangKy.Models.Order
 
-<h2>Order Confirmation</h2>
+<h2>Xác nhận đơn hàng</h2>
 
-<p>Thank you for your order, @Model.FullName!</p>
+<p>Cảm ơn bạn đã đặt hàng, @Model.FullName!</p>
 
-<h3>Order Details</h3>
-<p>Order Number: @Model.Id</p>
-<p>Order Date: @Model.OrderDate.ToShortDateString()</p>
+<h3>Chi tiết đơn hàng</h3>
+<p>Số điện thoại đặt hàng: @Model.Id</p>
+<p>Ngày đặt hàng: @Model.OrderDate.ToShortDateString()</p>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Product</th>
-            <th>Quantity</th>
-            <th>Price</th>
-            <th>Total</th>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Giá</th>
+            <th>Tổng</th>
         </tr>
     </thead>
     <tbody>
@@ -33,6 +33,6 @@
     </tbody>
 </table>
 
-<h3>Total: @Model.TotalPrice.ToString("c")</h3>
+<h3>Tồng cộng: @Model.TotalPrice.ToString("c")</h3>
 
-<a asp-controller="Home" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
+<a asp-controller="Home" asp-action="Index" class="btn btn-primary">Tiếp tục mua sắm</a>
