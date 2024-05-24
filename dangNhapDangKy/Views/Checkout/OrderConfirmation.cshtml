@@ -1,0 +1,38 @@
+﻿@model dangNhapDangKy.Models.Order
+
+<h2>Order Confirmation</h2>
+
+<p>Thank you for your order, @Model.FullName!</p>
+
+<h3>Order Details</h3>
+<p>Order Number: @Model.Id</p>
+<p>Order Date: @Model.OrderDate.ToShortDateString()</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.Product.Name</td>
+                <td>@item.Quantity</td>
+                <td>@item.UnitPrice.ToString("c")</td>
+                @{
+                    var totalPrice = item.UnitPrice * item.Quantity;
+                }
+                <td>@totalPrice.ToString("c")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<h3>Total: @Model.TotalPrice.ToString("c")</h3>
+
+<a asp-controller="Home" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
