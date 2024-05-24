@@ -1,15 +1,15 @@
 ﻿@model dangNhapDangKy.Models.Product
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Xóa";
     Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
 }
 
-<h1>Delete</h1>
+<h1>Xóa</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Bạn có chắc chắn muốn xóa không?</h3>
 <div>
-    <h4>Product</h4>
+    <h4>Sản phẩm</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -49,10 +49,10 @@
             <img src=@Model.Image alt="@Model.Name" style="width:300px;height:300px;" />
         </dd>
     </dl>
-    
+
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-action="Index">Back to List</a>
+        <input type="submit" value="Xóa" class="btn btn-danger" /> |
+        <a asp-action="Index">Quay lại danh sách</a>
     </form>
 </div>

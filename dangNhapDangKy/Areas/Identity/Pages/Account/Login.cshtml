@@ -2,7 +2,7 @@
 @model LoginModel
 
 @{
-    ViewData["Title"] = "Log in";
+    ViewData["Title"] = "Đăng nhập";
 }
 
 <h1>@ViewData["Title"]</h1>
@@ -10,7 +10,7 @@
     <div class="col-md-4">
         <section>
             <form id="account" method="post">
-                <h2>Use a local account to log in.</h2>
+                <h2>Sử dụng tài khoản cục bộ để đăng nhập.</h2>
                 <hr />
                 <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
                 <div class="form-floating mb-3">
@@ -23,24 +23,25 @@
                     <label asp-for="Input.Password" class="form-label">Password</label>
                     <span asp-validation-for="Input.Password" class="text-danger"></span>
                 </div>
-                <div class="checkbox mb-3">
-                    <label asp-for="Input.RememberMe" class="form-label">
-                        <input class="form-check-input" asp-for="Input.RememberMe" />
-                        @Html.DisplayNameFor(m => m.Input.RememberMe)
-                    </label>
+                 <div class="checkbox mb-3">
+                <label asp-for="Input.RememberMe" class="form-label">
+                <input class="form-check-input" asp-for="Input.RememberMe" />
+                Nhớ mật khẩu
+                </label>
+                </div>
+               
+                <div>
+                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Đăng nhập</button>
                 </div>
                 <div>
-                    <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-primary">Log in</button>
-                </div>
-                <div>
                     <p>
-                        <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        <a id="forgot-password" asp-page="./ForgotPassword">Quên mật khẩu?</a>
                     </p>
                     <p>
-                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Đăng ký làm người dùng mới</a>
                     </p>
                     <p>
-                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                        <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Gửi lại email xác nhận</a>
                     </p>
                 </div>
             </form>
@@ -48,15 +49,16 @@
     </div>
     <div class="col-md-6 col-md-offset-2">
         <section>
-            <h3>Use another service to log in.</h3>
+            <h3>Sử dụng dịch vụ khác để đăng nhập.</h3>
             <hr />
             @{
                 if ((Model.ExternalLogins?.Count ?? 0) == 0)
                 {
                     <div>
                         <p>
-                            There are no external authentication services configured. See this <a href="https://go.microsoft.com/fwlink/?LinkID=532715">article
-                            about setting up this ASP.NET application to support logging in via external services</a>.
+                            Không có dịch vụ xác thực bên ngoài nào được định cấu hình. Xem cái này <a href="https://go.microsoft.com/fwlink/?LinkID=532715">
+                                bài viết về thiết lập ứng dụng ASP.NET này để hỗ trợ đăng nhập qua dịch vụ bên ngoài
+                            </a>.
                         </p>
                     </div>
                 }

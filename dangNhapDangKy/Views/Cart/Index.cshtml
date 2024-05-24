@@ -1,20 +1,20 @@
 ﻿@model dangNhapDangKy.Models.Cart
 
-<h2>Your Cart</h2>
+<h2>Giỏ hàng của bạn</h2>
 
 @if (Model.Items.Count == 0)
 {
-    <p>Your cart is empty.</p>
+    <p>Giỏ hàng của bạn trống trơn.</p>
 }
 else
 {
     <table class="table">
         <thead>
             <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
+                <th>Sản Phẩm</th>
+                <th>Số lượng</th>
+                <th>Giá</th>
+                <th>Tổng</th>
                 <th></th>
             </tr>
         </thead>
@@ -27,7 +27,7 @@ else
                         <form asp-action="UpdateCartItemQuantity" method="post" style="display:inline-block">
                             <input type="hidden" name="productId" value="@item.ProductId" />
                             <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control" style="width: 80px; display:inline-block" />
-                            <button type="submit" class="btn btn-primary">Update</button>
+                            <button type="submit" class="btn btn-primary">Cập nhật</button>
                         </form>
                     </td>
                     <td>@item.Product.Price.ToString("c")</td>
@@ -36,14 +36,14 @@ else
                     }
                     <td>@totalPrice.ToString("c")</td>
                     <td>
-                        <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId" class="btn btn-danger">Remove</a>
+                        <a asp-action="RemoveFromCart" asp-route-productId="@item.ProductId" class="btn btn-danger">Xóa khỏi giỏ hàng</a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <h3>Total: @Model.GetTotalPrice().ToString("c")</h3>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Continue Shopping</a>
-    <a asp-controller="Checkout" asp-action="Index" class="btn btn-success">Checkout</a>
+    <h3>Tổng cộng: @Model.GetTotalPrice().ToString("c")</h3>
+    <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Tiếp tục mua sắm</a>
+    <a asp-controller="Checkout" asp-action="Index" class="btn btn-success">Thanh toán</a>
 }

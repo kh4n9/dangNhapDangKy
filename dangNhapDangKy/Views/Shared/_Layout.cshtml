@@ -33,10 +33,10 @@
         <div class="row bg-secondary py-1 px-xl-5">
             <div class="col-lg-6 d-none d-lg-block">
                 <div class="d-inline-flex align-items-center h-100">
-                    <a class="text-body mr-3" href="">About</a>
-                    <a class="text-body mr-3" href="">Contact</a>
-                    <a class="text-body mr-3" href="">Help</a>
-                    <a class="text-body mr-3" href="">FAQs</a>
+                    <a class="text-body mr-3" href="">Về chúng tôi</a>
+                    <a class="text-body mr-3" href="">Liên hệ</a>
+                    <a class="text-body mr-3" href="">Trợ giúp</a>
+                    <a class="text-body mr-3" href="">Câu hỏi thường gặp</a>
                 </div>
             </div>
             <div class="col-lg-6 text-center text-lg-right">
@@ -83,7 +83,7 @@
             <div class="col-lg-4 col-6 text-left">
                 <form action="">
                     <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Search for products">
+                        <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
                         <div class="input-group-append">
                             <span class="input-group-text bg-transparent text-primary">
                                 <i class="fa fa-search"></i>
@@ -93,7 +93,7 @@
                 </form>
             </div>
             <div class="col-lg-4 col-6 text-right">
-                <p class="m-0">Customer Service</p>
+                <p class="m-0">Dịch vụ khách hàng</p>
                 <h5 class="m-0">+84 349668566</h5>
             </div>
         </div>
@@ -114,12 +114,12 @@
                     </button>
                     <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                         <div class="navbar-nav mr-auto py-0">
-                            <a asp-controller="Home" asp-action="" class="nav-item nav-link active">Home</a>
-                            <a asp-controller="Cart" asp-action="" class="nav-item nav-link active">Cart</a>
+                            <a asp-controller="Home" asp-action="" class="nav-item nav-link active">Trang Chủ</a>
+                            <a asp-controller="Cart" asp-action="" class="nav-item nav-link active">Giỏ hàng</a>
                             @* <a asp-controller="Ai" asp-action="" class="nav-item nav-link active">GPT</a> *@
                             @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                             {
-                                <a asp-area="Admin" asp-controller="Admin" asp-action="Dashboard" class="nav-item nav-link active">Dashboard</a>
+                                <a asp-area="Admin" asp-controller="Admin" asp-action="Dashboard" class="nav-item nav-link active">Bảng điều khiển</a>
                             }
 
                             
