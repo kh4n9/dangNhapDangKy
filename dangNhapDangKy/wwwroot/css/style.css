@@ -1,4 +1,4 @@
-/******* Bootstrap Theming ********/
+﻿/******* Bootstrap Theming ********/
 /*!
  * Bootstrap v4.5.3 (https://getbootstrap.com/)
  * Copyright 2011-2020 The Bootstrap Authors
@@ -9709,5 +9709,15 @@ a.text-dark:hover, a.text-dark:focus {
   100% {
     transform: translateY(-15px);
   }
+}
+.container-fluid.fixed-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Đảm bảo topbar nằm trên cùng */
+}
+.shop {
+    margin-top: 200px;
 }
 
