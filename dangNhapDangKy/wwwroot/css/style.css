@@ -9902,5 +9902,9 @@ a.text-dark:hover, a.text-dark:focus {
     width: 150px;
     border-radius: 0px !important;
 }
+.navbar-nav {
+    list-style-type: none; /* Loại bỏ dấu chấm */
+    margin-left: auto; /* Đẩy các mục sang phải */
+}
 
 
