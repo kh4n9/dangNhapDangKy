@@ -45,7 +45,12 @@
                         <p class="p text-decoration-none text-truncate" href="">Danh Mục: @item.Category.Name</p>
                         <p class="p text-decoration-none text-truncate" href="">Nhãn Hiệu: @item.Brand.Name</p>
                         <div class="d-flex align-items-center justify-content-center mt-2">
-                            <h5>@item.Price.ToString("c")</h5><h6 class="text-muted ml-2"><del>$@(item.Price * (decimal)1.5)</del></h6>
+                        @using System.Globalization
+                            @{
+                                var vietnamCulture = new CultureInfo("vi-VN");
+                                var formattedPrice = item.Price.ToString("c", vietnamCulture);
+                            }
+                            <p>@formattedPrice</p>
                         </div>
                         <div class="d-flex align-items-center justify-content-center mb-1">
                             <small class="fa fa-star text-primary mr-1"></small>

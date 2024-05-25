@@ -9717,8 +9717,20 @@ a.text-dark:hover, a.text-dark:focus {
     width: 100%;
     z-index: 1000; /* Đảm bảo topbar nằm trên cùng */
 }
+.container-fluid.fixed-navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000; /* Đảm bảo navbar nằm trên cùng */
+}
+
+.barbar{
+    margin-top:95px;
+}
+
 .shop {
-    margin-top: 200px;
+    margin-top: 175px;
 }
 .detail body {
     background-color: #ecedee;
@@ -9902,9 +9914,6 @@ a.text-dark:hover, a.text-dark:focus {
     width: 150px;
     border-radius: 0px !important;
 }
-.navbar-nav {
-    list-style-type: none; /* Loại bỏ dấu chấm */
-    margin-left: auto; /* Đẩy các mục sang phải */
-}
+
 
 
