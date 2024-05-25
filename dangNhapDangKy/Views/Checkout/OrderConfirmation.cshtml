@@ -27,12 +27,26 @@
                 @{
                     var totalPrice = item.UnitPrice * item.Quantity;
                 }
-                <td>@totalPrice.ToString("c")</td>
+                <td>
+                @using System.Globalization
+                    @{
+                        var vietnamCulture = new CultureInfo("vi-VN");
+                        var formattedPrice = totalPrice.ToString("c", vietnamCulture);
+                    }
+                    <p>@formattedPrice</p>
+                </td>
             </tr>
         }
     </tbody>
 </table>
 
-<h3>Tồng cộng: @Model.TotalPrice.ToString("c")</h3>
+<h3>Tồng cộng: 
+    @using System.Globalization
+    @{
+        var vietnamCulture1 = new CultureInfo("vi-VN");
+        var formattedPrice1 = @Model.TotalPrice.ToString("c", vietnamCulture1);
+    }
+    <p>@formattedPrice1</p>
+</h3>
 
 <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Tiếp tục mua sắm</a>
