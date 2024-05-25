@@ -29,51 +29,8 @@
 
 <body>
     <!-- Topbar Start -->
-    <div class="container-fluid">
-        @* <div class="row bg-secondary py-1 px-xl-5">
-            <div class="col-lg-6 d-none d-lg-block">
-                <div class="d-inline-flex align-items-center h-100">
-                    <a class="text-body mr-3" href="">Về chúng tôi</a>
-                    <a class="text-body mr-3" href="">Liên hệ</a>
-                    <a class="text-body mr-3" href="">Trợ giúp</a>
-                    <a class="text-body mr-3" href="">Câu hỏi thường gặp</a>
-                </div>
-            </div>
-            <div class="col-lg-6 text-center text-lg-right">
-                <div class="d-inline-flex align-items-center">
-                    <div class="btn-group">
-                        <partial name="_LoginPartial" />
-                    </div>
-                    <div class="btn-group mx-2">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">USD</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">EUR</button>
-                            <button class="dropdown-item" type="button">GBP</button>
-                            <button class="dropdown-item" type="button">CAD</button>
-                        </div>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">EN</button>
-                        <div class="dropdown-menu dropdown-menu-right">
-                            <button class="dropdown-item" type="button">FR</button>
-                            <button class="dropdown-item" type="button">AR</button>
-                            <button class="dropdown-item" type="button">RU</button>
-                        </div>
-                    </div>
-                </div>
-                <div class="d-inline-flex align-items-center d-block d-lg-none">
-                    <a href="" class="btn px-0 ml-2">
-                        <i class="fas fa-heart text-dark"></i>
-                        <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
-                    </a>
-                    <a href="" class="btn px-0 ml-2">
-                        <i class="fas fa-shopping-cart text-dark"></i>
-                        <span class="badge text-dark border border-dark rounded-circle" style="padding-bottom: 2px;">0</span>
-                    </a>
-                </div>
-            </div>
-        </div> *@
-        <div class="row align-items-center bg-light py-4 px-xl-6 d-none d-lg-flex">
+    <div class="container-fluid fixed-topbar">
+        <div class="row align-items-center bg-light py-4 px-xl-6 d-none d-lg-flex ">
             <div class="col-lg-4">
                 <a href="" class="text-decoration-none">
                     <span class="h1 text-uppercase text-primary bg-dark px-2">Shop</span>
@@ -95,64 +52,46 @@
             <div class="col-lg-4 col-6 text-right d-inline-flex ">
                 <partial name="_LoginPartial" />
             </div>
-@*             <div class="col-lg-4 col-6 text-right">
-                <p class="m-0">Dịch vụ khách hàng</p>
-                <h5 class="m-0">+84 349668566</h5>
-            </div> *@
         </div>
-    </div>
-    <!-- Topbar End -->
-    <!-- Navbar Start -->
-    <div class="container-fluid bg-dark mb-30">
-        <div class="row px-xl-5">
-            
-            <div class="col-lg-9">
-                <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
-                    <a href="" class="text-decoration-none d-block d-lg-none">
-                        <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
-                        <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
-                    </a>
-                    <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
-                        <div class="navbar-nav mr-auto py-0">
-                            <a asp-controller="Home" asp-action="" class="nav-item nav-link active">Trang Chủ</a>
-                            <a asp-controller="Cart" asp-action="" class="nav-item nav-link active">Giỏ hàng</a>
-                            @* <a asp-controller="Ai" asp-action="" class="nav-item nav-link active">GPT</a> *@
-                            @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
-                            {
-                                <a asp-area="Admin" asp-controller="Admin" asp-action="Dashboard" class="nav-item nav-link active">Bảng điều khiển</a>
-                            }
-
-                            
-
-
+        <div class="container-fluid bg-dark mb-30">
+            <div class="row px-xl-5">
+                <div class="col-lg-9">
+                    <nav class="navbar navbar-expand-lg bg-dark navbar-dark py-3 py-lg-0 px-0">
+                        <a href="" class="text-decoration-none d-block d-lg-none">
+                            <span class="h1 text-uppercase text-dark bg-light px-2">Multi</span>
+                            <span class="h1 text-uppercase text-light bg-primary px-2 ml-n1">Shop</span>
+                        </a>
+                        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarCollapse">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                        <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                            <div class="navbar-nav mr-auto py-0">
+                                <a asp-controller="Home" asp-action="" class="nav-item nav-link active">Trang Chủ</a>
+                                <a asp-controller="Cart" asp-action="" class="nav-item nav-link active">Giỏ hàng</a>
+                                @* <a asp-controller="Ai" asp-action="" class="nav-item nav-link active">GPT</a> *@
+                                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+                                {
+                                    <a asp-area="Admin" asp-controller="Admin" asp-action="Dashboard" class="nav-item nav-link active">Bảng điều khiển</a>
+                                }
+                            </div>
                         </div>
-                        <div class="navbar-nav ml-auto py-0 d-none d-lg-block">
-                            @* <a href="Cart" class="btn px-0">
-                                <i class="fas fa-heart text-primary"></i>
-                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;">0</span>
-                            </a> *@
-                            @* <a asp-controller="Cart" asp-action="" class="btn px-0 ml-3">
-                                <i class="fas fa-shopping-cart text-primary"></i>
-                                <span class="badge text-secondary border border-secondary rounded-circle" style="padding-bottom: 2px;"></span>
-                            </a> *@
-                        </div>
-                    </div>
-                </nav>
+                    </nav>
+                </div>
             </div>
         </div>
     </div>
-    <!-- Navbar End -->
+    
+    <!-- Topbar End -->
+  
     <!-- Shop Start -->
-
-    <div class="container-fluid">
+    
+    <div class="container-fluid shop">
         <div class="row px-xl-5 ">
             @RenderBody()
         </div>
     </div>
     <!-- Shop End -->
+
     <!-- Footer Start -->
     <div class="container-fluid bg-dark text-secondary mt-5 pt-5">
         <div class="row px-xl-5 pt-5">
@@ -170,7 +109,7 @@
                         <div class="d-flex flex-column justify-content-start">
                             <a class="text-secondary mb-2" href="Home"><i class="fa fa-angle-right mr-2"></i>Trang Chủ</a>
                             <a class="text-secondary mb-2" href="Cart"><i class="fa fa-angle-right mr-2"></i>Giỏ Hàng</a>
-                            <a class="text-secondary mb-2" href="#"><i class="fa fa-angle-right mr-2"></i>Thanh Toán</a>
+                            <a class="text-secondary mb-2" href="Checkout"><i class="fa fa-angle-right mr-2"></i>Thanh Toán</a>
                             <a class="text-secondary" href="#"><i class="fa fa-angle-right mr-2"></i>Liên Hệ</a>
                         </div>
                     </div>
