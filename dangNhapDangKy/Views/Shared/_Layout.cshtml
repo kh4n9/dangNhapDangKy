@@ -66,8 +66,8 @@
                         </button>
                         <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                             <div class="navbar-nav mr-auto py-0">
-                                <a asp-controller="Home" asp-action="" class="nav-item nav-link active">Trang Chủ</a>
-                                <a asp-controller="Cart" asp-action="" class="nav-item nav-link active">Giỏ hàng</a>
+                                <a asp-area="" asp-controller="Home" asp-action="" class="nav-item nav-link active">Trang Chủ</a>
+                                <a asp-area="" asp-controller="Cart" asp-action="" class="nav-item nav-link active">Giỏ hàng</a>
                                 @* <a asp-controller="Ai" asp-action="" class="nav-item nav-link active">GPT</a> *@
                                 @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                                 {

@@ -1,11 +1,13 @@
 ﻿using dangNhapDangKy.Data;
 using dangNhapDangKy.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace dangNhapDangKy.Controllers
 {
+    [Authorize]
     public class CheckoutController : Controller
     {
         private readonly ApplicationDbContext _context;
