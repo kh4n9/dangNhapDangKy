@@ -7,22 +7,32 @@
 
 <h1>Orders</h1>
 
-<form method="get">
-    <div class="form-group">
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" name="startDate" class="form-control" value="@ViewContext.HttpContext.Request.Query["startDate"]" />
+<form method="get" class="d-flex justify-content-around">
+    <div>
+        <div class="form-group">
+            <label for="searchString">Search by Name</label>
+            <input type="text" name="searchString" id="searchString" value="@ViewData["CurrentFilter"]" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="phoneNumber">Search by Phone Number</label>
+            <input type="text" name="phoneNumber" id="phoneNumber" value="@ViewData["CurrentPhoneFilter"]" class="form-control" />
+        </div>
     </div>
-    <div class="form-group">
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" name="endDate" class="form-control" value="@ViewContext.HttpContext.Request.Query["endDate"]" />
+    <div>
+        <div class="form-group">
+            <label for="startDate">Start Date</label>
+            <input type="date" name="startDate" id="startDate" value="@ViewData["StartDate"]" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label for="endDate">End Date</label>
+            <input type="date" name="endDate" id="endDate" value="@ViewData["EndDate"]" class="form-control" />
+        </div>
     </div>
-    <button type="submit" class="btn btn-primary">Filter</button>
-    <a asp-action="Index" class="btn btn-secondary">Clear Filter</a>
+    <div>
+        <button type="submit" class="btn btn-primary">Apply Filters</button>
+    </div>
 </form>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 
 <table class="table">
     <thead>
@@ -47,13 +57,13 @@
                 <td>@item.FullName</td>
                 <td>@item.Address</td>
                 <td>@item.PhoneNumber</td>
-                <td>@item.TotalPrice</td>
+                <td>@item.TotalPrice.ToString("c")</td>
                 <td>@item.OrderDate</td>
                 <td>@item.GetOrderStatus()</td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    <a asp-action="Details" asp-route-id="@item.Id"><button type="button" class="btn btn-info">Details</button></a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><button type="button" class="btn btn-success">Edit</button></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><button type="button" class="btn btn-danger">Delete</button></a>
                 </td>
             </tr>
         }

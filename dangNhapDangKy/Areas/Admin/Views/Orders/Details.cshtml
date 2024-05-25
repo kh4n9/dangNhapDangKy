@@ -1,0 +1,103 @@
+﻿@model dangNhapDangKy.Models.Order
+
+@{
+    ViewData["Title"] = "Order Details";
+    Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
+}
+
+<h1>Order Details</h1>
+
+<div>
+    <h4>Order</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Id
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Id
+        </dd>
+        <dt class="col-sm-2">
+            Full Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.FullName
+        </dd>
+        <dt class="col-sm-2">
+            Address
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Address
+        </dd>
+        <dt class="col-sm-2">
+            Phone Number
+        </dt>
+        <dd class="col-sm-10">
+            @Model.PhoneNumber
+        </dd>
+        <dt class="col-sm-2">
+            Total Price
+        </dt>
+        <dd class="col-sm-10">
+            @Model.TotalPrice.ToString("c")
+        </dd>
+        <dt class="col-sm-2">
+            Order Date
+        </dt>
+        <dd class="col-sm-10">
+            @Model.OrderDate
+        </dd>
+        <dt class="col-sm-2">
+            Order Status
+        </dt>
+        <dd class="col-sm-10">
+            @Model.GetOrderStatus()
+        </dd>
+    </dl>
+
+    <h4>Order Items</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.OrderItems)
+            {
+                <tr>
+                    <td>@item.Product.Name</td> <!-- Assuming you have a ProductName property -->
+                    <td>@item.Quantity</td>
+                    <td>@item.UnitPrice.ToString("c")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <h4>Update Order Status</h4>
+    <form asp-action="UpdateStatus" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="form-group">
+            <label for="newStatus">Status</label>
+            <select id="newStatus" name="newStatus" class="form-control">
+                @{
+                    var statuses = new[] { (0, "Chờ xử lý"), (1, "Đã xử lý"), (2, "Đã hoàn thành") };
+                }
+                @foreach (var status in statuses)
+                {
+                    <option value="@status.Item1" selected="@(status.Item1 == Model.OrderStatus ? "selected" : null)">@status.Item2</option>
+                }
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Update Status</button>
+    </form>
+</div>
+
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
