@@ -57,7 +57,14 @@
                 <td>@item.FullName</td>
                 <td>@item.Address</td>
                 <td>@item.PhoneNumber</td>
-                <td>@item.TotalPrice.ToString("c")</td>
+                <td>
+                @using System.Globalization
+                    @{
+                        var vietnamCulture = new CultureInfo("vi-VN");
+                        var formattedPrice = item.TotalPrice.ToString("c", vietnamCulture);
+                    }
+                    <p>@formattedPrice</p>
+                </td>
                 <td>@item.OrderDate</td>
                 <td>@item.GetOrderStatus()</td>
                 <td>

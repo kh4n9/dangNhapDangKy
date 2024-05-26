@@ -1,6 +1,7 @@
 ﻿using dangNhapDangKy.Data;
 using dangNhapDangKy.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
@@ -11,6 +12,7 @@ namespace dangNhapDangKy.Controllers
     public class CheckoutController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public CheckoutController(ApplicationDbContext context)
         {
@@ -41,6 +43,15 @@ namespace dangNhapDangKy.Controllers
                     return View(model);
                 }
 
+                /*var user = await _userManager.GetUserAsync(User);*/
+                string username = null;
+                var user = new IdentityUser();
+                if (User.Identity.IsAuthenticated)
+                {
+                    username = User.Identity.Name;
+                    if (username != null) user = await _context.Users.FirstOrDefaultAsync(m => m.UserName == username);
+                }
+
                 // Lưu đơn hàng vào cơ sở dữ liệu
                 var order = new Order
                 {
@@ -50,6 +61,7 @@ namespace dangNhapDangKy.Controllers
                     TotalPrice = cart.GetTotalPrice(),
                     OrderDate = DateTime.Now,
                     OrderStatus = 0,
+                    UserId = user.Id,
                 OrderItems = cart.Items.Select(i => new OrderItem
                     {
                         ProductId = i.ProductId,

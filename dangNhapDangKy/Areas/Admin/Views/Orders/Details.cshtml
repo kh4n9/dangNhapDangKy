@@ -39,7 +39,12 @@
             Total Price
         </dt>
         <dd class="col-sm-10">
-            @Model.TotalPrice.ToString("c")
+            @using System.Globalization
+            @{
+                var vietnamCulture = new CultureInfo("vi-VN");
+                var formattedPrice = Model.TotalPrice.ToString("c", vietnamCulture);
+            }
+            <p>@formattedPrice</p>
         </dd>
         <dt class="col-sm-2">
             Order Date
@@ -70,7 +75,14 @@
                 <tr>
                     <td>@item.Product.Name</td> <!-- Assuming you have a ProductName property -->
                     <td>@item.Quantity</td>
-                    <td>@item.UnitPrice.ToString("c")</td>
+                    <td>
+                    @using System.Globalization
+                        @{
+                            var vietnamCulture1 = new CultureInfo("vi-VN");
+                            var formattedPrice1 = item.UnitPrice.ToString("c", vietnamCulture1);
+                        }
+                        <p>@formattedPrice1</p>
+                    </td>
                 </tr>
             }
         </tbody>

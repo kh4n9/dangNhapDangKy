@@ -1,8 +1,11 @@
-using dangNhapDangKy.Data;
+﻿using dangNhapDangKy.Data;
 using dangNhapDangKy.Models;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using Microsoft.AspNetCore.Http;
 
 namespace dangNhapDangKy.Controllers
 {
@@ -10,6 +13,7 @@ namespace dangNhapDangKy.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
         {
@@ -50,6 +54,36 @@ namespace dangNhapDangKy.Controllers
             }
 
             return View(product);
+        }
+
+        [Authorize] // Yêu cầu người dùng đã đăng nhập
+        public async Task<IActionResult> OrderHistory()
+        {
+            // Lấy thông tin về người dùng đã đăng nhập
+            /*var user = await _userManager.GetUserAsync(User);*/
+            string username = null;
+            var user = new IdentityUser();
+            if (User.Identity.IsAuthenticated)
+            {
+                username = User.Identity.Name;
+                if (username != null) user = await _context.Users.FirstOrDefaultAsync(m => m.UserName == username);
+            }
+
+            if (user == null)
+            {
+                // Xử lý khi người dùng không tồn tại
+                return NotFound();
+            }
+
+            // Lấy lịch sử mua hàng của người dùng từ cơ sở dữ liệu
+            var orders = await _context.Orders
+                .Where(o => o.UserId == user.Id)
+                .OrderByDescending(o => o.OrderDate)
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Product)
+                .ToListAsync();
+
+            return View(orders);
         }
     }
 }

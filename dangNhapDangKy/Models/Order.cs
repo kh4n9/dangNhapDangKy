@@ -23,6 +23,7 @@ namespace dangNhapDangKy.Models
         public List<OrderItem> OrderItems { get; set; }
         public int OrderStatus { get; set; } // 0 là đang xử lý 1 là đã xử lý 2 đã hoàn thành
 
+        public String UserId { get; set; }
         public string GetOrderStatus()
         {
             return OrderStatus switch

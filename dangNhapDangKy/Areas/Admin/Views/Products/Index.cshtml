@@ -42,7 +42,12 @@
                     @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
-                    @item.Price.ToString("c")
+                @using System.Globalization
+                    @{
+                        var vietnamCulture = new CultureInfo("vi-VN");
+                        var formattedPrice = item.Price.ToString("c", vietnamCulture);
+                    }
+                    <p>@formattedPrice</p>
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Category.Name)

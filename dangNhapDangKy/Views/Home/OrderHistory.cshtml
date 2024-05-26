@@ -1,0 +1,56 @@
+﻿@model IEnumerable<dangNhapDangKy.Models.Order>
+
+<h1>Lịch sử mua hàng</h1>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Ngày đặt</th>
+                <th>Tên</th>
+                <th>Địa chỉ</th>
+                <th>Số điện thoại</th>
+                <th>Sản phẩm</th>
+                <th>Tổng tiền</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model)
+            {
+                <tr>
+                    <td>@order.OrderDate.ToString("dd/MM/yyyy")</td>
+                    <td>@order.FullName</td>
+                    <td>@order.Address</td>
+                    <td>@order.PhoneNumber</td>
+                    <td>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Tên sản phẩm</th>
+                                    <th>Số lượng</th>
+                                    <th>Giá</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in order.OrderItems)
+                                {
+                                    <tr>
+                                        <td>@item.Product.Name</td>
+                                        <td>@item.Quantity</td>
+                                        <td>@item.Product.Price.ToString("C")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>@order.TotalPrice.ToString("C")</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>Không có lịch sử mua hàng.</p>
+}
