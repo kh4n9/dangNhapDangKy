@@ -62,18 +62,63 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,CategoryId,BrandId,Image")] Product product)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,CategoryId,BrandId")] Product product, IFormFile imageUrl)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(product);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    if (imageUrl != null)
+                    {
+                        // Lưu hình ảnh đại diện, sử dụng phương thức SaveImage
+                        product.Image = await SaveImage(imageUrl);
+                    }
+                    _context.Add(product);
+                    await _context.SaveChangesAsync();
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception ex)
+                {
+                    // Log error
+                    Console.WriteLine(ex.Message);
+                    ModelState.AddModelError("", "An error occurred while saving the product. Please try again.");
+                }
             }
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
+
+
+        /*private async Task<string> SaveImage(IFormFile image)
+        {
+            var savePath = Path.Combine("wwwroot/images", image.FileName); // 
+            using (var fileStream = new FileStream(savePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+            return "/images/" + image.FileName; // Trả về đường dẫn tương đối 
+        }*/
+        private async Task<string> SaveImage(IFormFile imageFile)
+        {
+            var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
+
+            // Kiểm tra và tạo thư mục nếu chưa tồn tại
+            if (!Directory.Exists(imagesPath))
+            {
+                Directory.CreateDirectory(imagesPath);
+            }
+
+            var filePath = Path.Combine(imagesPath, imageFile.FileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageFile.CopyToAsync(stream);
+            }
+
+            return "/images/" + imageFile.FileName;
+        }
+
 
         // GET: Admin/Products/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -98,8 +143,9 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,CategoryId,BrandId,Image")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,CategoryId,BrandId,Image")] Product product, IFormFile imageUrl)
         {
+            ModelState.Remove("Image");
             if (id != product.Id)
             {
                 return NotFound();
@@ -109,6 +155,19 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
             {
                 try
                 {
+                    var existingProduct = await GetByIdAsync(id); // Giả định có phương thức GetByIdAsync 
+
+                    // Giữ nguyên thông tin hình ảnh nếu không có hình mới được 
+
+                if (imageUrl == null)
+                    {
+                        product.Image = existingProduct.Image;
+                    }
+                    else
+                    {
+                        // Lưu hình ảnh mới 
+                        product.Image = await SaveImage(imageUrl);
+                    }
                     _context.Update(product);
                     await _context.SaveChangesAsync();
                 }
@@ -128,6 +187,13 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
+        }
+
+        public async Task<Product> GetByIdAsync(int id)
+        {
+            // return await _context.Products.FindAsync(id); 
+            // lấy thông tin kèm theo category 
+            return await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
         }
 
         // GET: Admin/Products/Delete/5

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Drawing.Drawing2D;
 
@@ -14,6 +15,8 @@ namespace dangNhapDangKy.Models
         public Category? Category { get; set; }
         public int BrandId { get; set; }
         public Brand? Brand { get; set; }
-        public string Image { get; set; }
+        [BindNever]
+        public string? Image { get; set; }
+        public List<ProductImage>? Images { get; set; }
     }
 }
