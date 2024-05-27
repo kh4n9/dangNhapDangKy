@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dangNhapDangKy.Data;
 
@@ -11,9 +12,11 @@ using dangNhapDangKy.Data;
 namespace dangNhapDangKy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240527071219_ProductImage")]
+    partial class ProductImage
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -401,28 +404,6 @@ namespace dangNhapDangKy.Migrations
                     b.ToTable("ProductImages");
                 });
 
-            modelBuilder.Entity("dangNhapDangKy.Models.Size", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("Sizes");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -534,17 +515,6 @@ namespace dangNhapDangKy.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("dangNhapDangKy.Models.Size", b =>
-                {
-                    b.HasOne("dangNhapDangKy.Models.Product", "Product")
-                        .WithMany("Sizes")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("dangNhapDangKy.Models.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -563,8 +533,6 @@ namespace dangNhapDangKy.Migrations
             modelBuilder.Entity("dangNhapDangKy.Models.Product", b =>
                 {
                     b.Navigation("Images");
-
-                    b.Navigation("Sizes");
                 });
 #pragma warning restore 612, 618
         }
