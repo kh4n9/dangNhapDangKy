@@ -18,5 +18,7 @@ namespace dangNhapDangKy.Models
         [BindNever]
         public string? Image { get; set; }
         public List<ProductImage>? Images { get; set; }
+        // Add the Sizes property
+        public List<Size>? Sizes { get; set; }
     }
 }

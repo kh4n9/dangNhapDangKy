@@ -52,8 +52,10 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
         // GET: Admin/Products/Create
         public IActionResult Create()
         {
+            ViewBag.Sizes = _context.Sizes.ToList();
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
+            ViewBag.Sizes = new SelectList(_context.Sizes, "Id", "Name");
             return View();
         }
 
@@ -62,7 +64,7 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,CategoryId,BrandId")] Product product, IFormFile imageUrl)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,CategoryId,BrandId")] Product product, IFormFile imageUrl, List<String> sizes)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +75,13 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
                         // Lưu hình ảnh đại diện, sử dụng phương thức SaveImage
                         product.Image = await SaveImage(imageUrl);
                     }
-                    _context.Add(product);
+                    _context.Products.Add(product);
+                    await _context.SaveChangesAsync();
+                    // Lưu các Size vào CSDL sau khi sản phẩm đã được lưu
+                    foreach (var size in sizes)
+                    {
+                        _context.Sizes.Add(new Size { Name = size, ProductId = product.Id });
+                    }
                     await _context.SaveChangesAsync();
                     return RedirectToAction(nameof(Index));
                 }
@@ -86,6 +94,7 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
             }
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
+            ViewBag.Sizes = await _context.Sizes.ToListAsync();
             return View(product);
         }
 

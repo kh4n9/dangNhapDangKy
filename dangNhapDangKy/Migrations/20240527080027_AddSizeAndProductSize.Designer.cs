@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using dangNhapDangKy.Data;
 
@@ -11,9 +12,11 @@ using dangNhapDangKy.Data;
 namespace dangNhapDangKy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240527080027_AddSizeAndProductSize")]
+    partial class AddSizeAndProductSize
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -220,6 +223,21 @@ namespace dangNhapDangKy.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProductSize", b =>
+                {
+                    b.Property<int>("ProductsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SizesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProductsId", "SizesId");
+
+                    b.HasIndex("SizesId");
+
+                    b.ToTable("ProductSize");
+                });
+
             modelBuilder.Entity("dangNhapDangKy.Models.Brand", b =>
                 {
                     b.Property<int>("Id")
@@ -413,12 +431,7 @@ namespace dangNhapDangKy.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ProductId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("ProductId");
 
                     b.ToTable("Sizes");
                 });
@@ -470,6 +483,21 @@ namespace dangNhapDangKy.Migrations
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ProductSize", b =>
+                {
+                    b.HasOne("dangNhapDangKy.Models.Product", null)
+                        .WithMany()
+                        .HasForeignKey("ProductsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("dangNhapDangKy.Models.Size", null)
+                        .WithMany()
+                        .HasForeignKey("SizesId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -534,17 +562,6 @@ namespace dangNhapDangKy.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("dangNhapDangKy.Models.Size", b =>
-                {
-                    b.HasOne("dangNhapDangKy.Models.Product", "Product")
-                        .WithMany("Sizes")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Product");
-                });
-
             modelBuilder.Entity("dangNhapDangKy.Models.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -563,8 +580,6 @@ namespace dangNhapDangKy.Migrations
             modelBuilder.Entity("dangNhapDangKy.Models.Product", b =>
                 {
                     b.Navigation("Images");
-
-                    b.Navigation("Sizes");
                 });
 #pragma warning restore 612, 618
         }
