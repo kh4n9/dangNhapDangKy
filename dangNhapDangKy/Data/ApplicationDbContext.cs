@@ -14,6 +14,7 @@ namespace dangNhapDangKy.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<dangNhapDangKy.Models.CartItem> CartItem { get; set; } = default!;
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<Size> Sizes { get; set; }

@@ -1,8 +1,12 @@
 ﻿using dangNhapDangKy.Data;
 using dangNhapDangKy.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace dangNhapDangKy.Controllers
 {
@@ -14,9 +18,20 @@ namespace dangNhapDangKy.Controllers
         {
             _context = context;
         }
-        public IActionResult Index()
+
+        public async Task<IActionResult> Index()
         {
             var cart = GetCart();
+            foreach (var item in cart.Items)
+            {
+                var product = await _context.Products
+                    .Include(p => p.Sizes)
+                    .FirstOrDefaultAsync(p => p.Id == item.ProductId);
+                if (product != null)
+                {
+                    item.Product = product; // Assign the product to the cart item
+                }
+            }
             return View(cart);
         }
 
@@ -47,6 +62,21 @@ namespace dangNhapDangKy.Controllers
             SaveCart(cart);
             return RedirectToAction("Index");
         }
+
+        // POST: UpdateCartItemSize
+        [HttpPost]
+        public async Task<IActionResult> UpdateCartItemSize(int productId, string size)
+        {
+            var cart = GetCart();
+            var cartItem = cart.Items.FirstOrDefault(item => item.ProductId == productId);
+            if (cartItem != null)
+            {
+                cartItem.Size = size;
+                SaveCart(cart);
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
 
         private Cart GetCart()
         {

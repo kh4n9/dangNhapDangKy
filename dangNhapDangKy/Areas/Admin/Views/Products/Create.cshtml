@@ -44,7 +44,6 @@
             <div id="sizeFields">
                 <!-- Các trường nhập liệu cho Size sẽ được thêm vào đây bằng JavaScript -->
             </div>
-
             <button type="button" onclick="addSizeField()">Thêm Size</button>
             <div class="form-group">
                 <input type="submit" value="Tạo mới" class="btn btn-primary" />
@@ -57,9 +56,9 @@
     function addSizeField() {
         var sizeField = document.createElement("div");
         sizeField.innerHTML = `
-                <label for="sizes">Size:</label>
-                <input type="text" name="sizes" class="form-control" />
-            `;
+                    <label for="sizes">Size:</label>
+                    <input type="text" name="sizes" class="form-control" />
+                `;
         document.getElementById("sizeFields").appendChild(sizeField);
     }
 </script>

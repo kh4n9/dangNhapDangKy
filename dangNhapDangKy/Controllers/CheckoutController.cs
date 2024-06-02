@@ -14,9 +14,10 @@ namespace dangNhapDangKy.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public CheckoutController(ApplicationDbContext context)
+        public CheckoutController(ApplicationDbContext context, UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -43,7 +44,6 @@ namespace dangNhapDangKy.Controllers
                     return View(model);
                 }
 
-                /*var user = await _userManager.GetUserAsync(User);*/
                 string username = null;
                 var user = new IdentityUser();
                 if (User.Identity.IsAuthenticated)
@@ -53,6 +53,26 @@ namespace dangNhapDangKy.Controllers
                 }
 
                 // Lưu đơn hàng vào cơ sở dữ liệu
+                var orderItems = new List<OrderItem>();
+                foreach (var item in cart.Items)
+                {
+                    // Đảm bảo rằng Size đã được chọn
+                    if (string.IsNullOrEmpty(item.Size))
+                    {
+                        ModelState.AddModelError("", "Please select a size for all items.");
+                        return View(model);
+                    }
+
+                    var orderItem = new OrderItem
+                    {
+                        ProductId = item.ProductId,
+                        Quantity = item.Quantity,
+                        UnitPrice = item.Product.Price,
+                        Size = item.Size // Thêm kích thước vào OrderItem
+                    };
+                    orderItems.Add(orderItem);
+                }
+
                 var order = new Order
                 {
                     FullName = model.FullName,
@@ -62,12 +82,7 @@ namespace dangNhapDangKy.Controllers
                     OrderDate = DateTime.Now,
                     OrderStatus = 0,
                     UserId = user.Id,
-                OrderItems = cart.Items.Select(i => new OrderItem
-                    {
-                        ProductId = i.ProductId,
-                        Quantity = i.Quantity,
-                        UnitPrice = i.Product.Price
-                    }).ToList()
+                    OrderItems = orderItems
                 };
 
                 _context.Orders.Add(order);

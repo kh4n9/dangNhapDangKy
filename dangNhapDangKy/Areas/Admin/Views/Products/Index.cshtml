@@ -28,6 +28,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Image)
             </th>
+            <th>
+                Sizes
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -57,6 +60,22 @@
                 </td>
                 <td>
                     <img src=@item.Image alt="@item.Name" style="width:150px;height:150px;" />
+                </td>
+                <td>
+                    <!-- Hiển thị danh sách size -->
+                    @if (item.Sizes != null && item.Sizes.Count > 0)
+                    {
+                        <ul>
+                            @foreach (var size in item.Sizes)
+                            {
+                                <li>@size.Name</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>Không có size</p>
+                    }
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Chỉnh sửa</a> |

@@ -25,7 +25,7 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
         // GET: Admin/Products
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Products.Include(p => p.Brand).Include(p => p.Category);
+            var applicationDbContext = _context.Products.Include(p => p.Brand).Include(p => p.Category).Include(p => p.Sizes);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -40,6 +40,7 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
             var product = await _context.Products
                 .Include(p => p.Brand)
                 .Include(p => p.Category)
+                .Include(p => p.Sizes)
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (product == null)
             {
@@ -52,62 +53,47 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
         // GET: Admin/Products/Create
         public IActionResult Create()
         {
-            ViewBag.Sizes = _context.Sizes.ToList();
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name");
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
-            ViewBag.Sizes = new SelectList(_context.Sizes, "Id", "Name");
-            return View();
+            var product = new Product();
+            return View(product);  // Trả về một instance của Product
         }
 
+
         // POST: Admin/Products/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,CategoryId,BrandId")] Product product, IFormFile imageUrl, List<String> sizes)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,CategoryId,BrandId,Image")] Product product, IFormFile imageUrl, List<string> sizes)
         {
             if (ModelState.IsValid)
             {
-                try
+                if (imageUrl != null)
                 {
-                    if (imageUrl != null)
-                    {
-                        // Lưu hình ảnh đại diện, sử dụng phương thức SaveImage
-                        product.Image = await SaveImage(imageUrl);
-                    }
-                    _context.Products.Add(product);
-                    await _context.SaveChangesAsync();
-                    // Lưu các Size vào CSDL sau khi sản phẩm đã được lưu
-                    foreach (var size in sizes)
-                    {
-                        _context.Sizes.Add(new Size { Name = size, ProductId = product.Id });
-                    }
-                    await _context.SaveChangesAsync();
-                    return RedirectToAction(nameof(Index));
+                    product.Image = await SaveImage(imageUrl);
                 }
-                catch (Exception ex)
+
+                // Khởi tạo danh sách Sizes nếu nó chưa được khởi tạo
+                if (product.Sizes == null)
                 {
-                    // Log error
-                    Console.WriteLine(ex.Message);
-                    ModelState.AddModelError("", "An error occurred while saving the product. Please try again.");
+                    product.Sizes = new List<Size>();
                 }
+
+                // Thêm danh sách size
+                foreach (var sizeName in sizes)
+                {
+                    product.Sizes.Add(new Size { Name = sizeName });
+                }
+
+                _context.Add(product);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
             }
+
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
-            ViewBag.Sizes = await _context.Sizes.ToListAsync();
             return View(product);
         }
 
-
-        /*private async Task<string> SaveImage(IFormFile image)
-        {
-            var savePath = Path.Combine("wwwroot/images", image.FileName); // 
-            using (var fileStream = new FileStream(savePath, FileMode.Create))
-            {
-                await image.CopyToAsync(fileStream);
-            }
-            return "/images/" + image.FileName; // Trả về đường dẫn tương đối 
-        }*/
         private async Task<string> SaveImage(IFormFile imageFile)
         {
             var imagesPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images");
@@ -137,22 +123,23 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
                 return NotFound();
             }
 
-            var product = await _context.Products.FindAsync(id);
+            var product = await _context.Products
+                                        .Include(p => p.Sizes)
+                                        .FirstOrDefaultAsync(p => p.Id == id);
             if (product == null)
             {
                 return NotFound();
             }
+
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
 
         // POST: Admin/Products/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,CategoryId,BrandId,Image")] Product product, IFormFile imageUrl)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,CategoryId,BrandId,Image")] Product product, IFormFile imageUrl, List<string> newSizes)
         {
             ModelState.Remove("Image");
             if (id != product.Id)
@@ -164,20 +151,47 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
             {
                 try
                 {
-                    var existingProduct = await GetByIdAsync(id); // Giả định có phương thức GetByIdAsync 
+                    var existingProduct = await _context.Products
+                                                        .Include(p => p.Sizes)
+                                                        .FirstOrDefaultAsync(p => p.Id == id);
 
-                    // Giữ nguyên thông tin hình ảnh nếu không có hình mới được 
+                    if (existingProduct == null)
+                    {
+                        return NotFound();
+                    }
 
-                if (imageUrl == null)
+                    if (imageUrl == null)
                     {
                         product.Image = existingProduct.Image;
                     }
                     else
                     {
-                        // Lưu hình ảnh mới 
                         product.Image = await SaveImage(imageUrl);
                     }
-                    _context.Update(product);
+
+                    // Cập nhật thông tin sản phẩm
+                    existingProduct.Name = product.Name;
+                    existingProduct.Description = product.Description;
+                    existingProduct.Price = product.Price;
+                    existingProduct.CategoryId = product.CategoryId;
+                    existingProduct.BrandId = product.BrandId;
+                    if (product.Image != null)
+                    {
+                        existingProduct.Image = product.Image;
+                    }
+
+                    // Cập nhật danh sách size
+                    _context.Sizes.RemoveRange(existingProduct.Sizes);
+                    foreach (var sizeName in newSizes)
+                    {
+                        existingProduct.Sizes.Add(new Size
+                        {
+                            Name = sizeName,
+                            ProductId = existingProduct.Id
+                        });
+                    }
+
+                    _context.Update(existingProduct);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -193,10 +207,12 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
             ViewData["BrandId"] = new SelectList(_context.Brands, "Id", "Name", product.BrandId);
             ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name", product.CategoryId);
             return View(product);
         }
+
 
         public async Task<Product> GetByIdAsync(int id)
         {

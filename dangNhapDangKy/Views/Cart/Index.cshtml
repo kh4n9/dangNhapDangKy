@@ -13,6 +13,7 @@ else
             <tr>
                 <th>Sản Phẩm</th>
                 <th>Số lượng</th>
+                <th>Size</th>
                 <th>Giá</th>
                 <th>Tổng</th>
                 <th></th>
@@ -26,12 +27,22 @@ else
                     <td>
                         <form asp-action="UpdateCartItemQuantity" method="post" style="display:inline-block">
                             <input type="hidden" name="productId" value="@item.ProductId" />
+                            <input type="hidden" name="sizeId" value="@item.Size" />
                             <input type="number" name="quantity" value="@item.Quantity" min="1" class="form-control" style="width: 80px; display:inline-block" />
                             <button type="submit" class="btn btn-primary">Cập nhật</button>
                         </form>
                     </td>
                     <td>
-                    @using System.Globalization
+                        <select name="sizeId" class="form-control size-dropdown" data-product-id="@item.ProductId">
+                            @foreach (var size in item.Product.Sizes)
+                            {
+                                var selected = size.Name == item.Size ? "selected" : "";
+                                <option value="@size.Name" selected="@selected">@size.Name</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                @using System.Globalization
                         @{
                             var vietnamCulture = new CultureInfo("vi-VN");
                             var formattedPrice = @item.Product.Price.ToString("c", vietnamCulture);
@@ -50,7 +61,8 @@ else
         </tbody>
     </table>
 
-    <h3>Tổng cộng: 
+    <h3>
+        Tổng cộng:
     @using System.Globalization
         @{
             var vietnamCulture1 = new CultureInfo("vi-VN");
@@ -61,3 +73,20 @@ else
     <a asp-controller="Home" asp-action="Index" class="btn btn-primary">Tiếp tục mua sắm</a>
     <a asp-controller="Checkout" asp-action="Index" class="btn btn-success">Thanh toán</a>
 }
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('.size-dropdown').change(function () {
+                var productId = $(this).data('product-id');
+                var size = $(this).val();
+                var selectElement = $(this);
+                $.post('@Url.Action("UpdateCartItemSize", "Cart")', { productId: productId, size: size }, function () {
+                    // Update the selected option without reloading the page
+                    selectElement.find('option:selected').removeAttr('selected');
+                    selectElement.find('option[value="' + size + '"]').attr('selected', 'selected');
+                });
+            });
+        });
+    </script>
+}
+

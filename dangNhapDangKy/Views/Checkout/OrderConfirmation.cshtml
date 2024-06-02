@@ -13,6 +13,7 @@
         <tr>
             <th>Sản phẩm</th>
             <th>Số lượng</th>
+            <th>Size</th>
             <th>Giá</th>
             <th>Tổng</th>
         </tr>
@@ -23,6 +24,7 @@
             <tr>
                 <td>@item.Product.Name</td>
                 <td>@item.Quantity</td>
+                <td>@item.Size</td> <!-- Thêm cột Size -->
                 <td>@item.UnitPrice.ToString("c")</td>
                 @{
                     var totalPrice = item.UnitPrice * item.Quantity;
@@ -40,7 +42,8 @@
     </tbody>
 </table>
 
-<h3>Tồng cộng: 
+<h3>
+    Tồng cộng:
     @using System.Globalization
     @{
         var vietnamCulture1 = new CultureInfo("vi-VN");

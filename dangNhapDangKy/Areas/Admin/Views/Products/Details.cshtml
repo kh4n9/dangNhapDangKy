@@ -27,7 +27,12 @@
             @Html.DisplayNameFor(model => model.Price)
         </dt>
         <dd class="col-sm-10">
-            @Model.Price.ToString("c")
+            @using System.Globalization
+            @{
+                var vietnamCulture = new CultureInfo("vi-VN");
+                var formattedPrice = Model.Price.ToString("c", vietnamCulture);
+            }
+            <p>@formattedPrice</p>
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Category)
@@ -40,6 +45,24 @@
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Brand.Name)
+        </dd>
+        <dt class="col-sm-2">
+            Sizes
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Sizes != null && Model.Sizes.Count > 0)
+            {
+                <ul>
+                    @foreach (var size in Model.Sizes)
+                    {
+                        <li>@size.Name</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>Không có size</p>
+            }
         </dd>
         <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Image)
