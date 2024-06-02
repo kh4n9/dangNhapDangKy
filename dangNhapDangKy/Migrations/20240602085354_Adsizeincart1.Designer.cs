@@ -12,8 +12,8 @@ using dangNhapDangKy.Data;
 namespace dangNhapDangKy.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240526104243_addUserIdForOrder1")]
-    partial class addUserIdForOrder1
+    [Migration("20240602085354_Adsizeincart1")]
+    partial class Adsizeincart1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -254,6 +254,9 @@ namespace dangNhapDangKy.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
+                    b.Property<string>("Size")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
@@ -364,7 +367,6 @@ namespace dangNhapDangKy.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Image")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
@@ -381,6 +383,50 @@ namespace dangNhapDangKy.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("dangNhapDangKy.Models.ProductImage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Url")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductImages");
+                });
+
+            modelBuilder.Entity("dangNhapDangKy.Models.Size", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("Sizes");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -483,6 +529,28 @@ namespace dangNhapDangKy.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("dangNhapDangKy.Models.ProductImage", b =>
+                {
+                    b.HasOne("dangNhapDangKy.Models.Product", "Product")
+                        .WithMany("Images")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
+            modelBuilder.Entity("dangNhapDangKy.Models.Size", b =>
+                {
+                    b.HasOne("dangNhapDangKy.Models.Product", "Product")
+                        .WithMany("Sizes")
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
+                });
+
             modelBuilder.Entity("dangNhapDangKy.Models.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -496,6 +564,13 @@ namespace dangNhapDangKy.Migrations
             modelBuilder.Entity("dangNhapDangKy.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("dangNhapDangKy.Models.Product", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Sizes");
                 });
 #pragma warning restore 612, 618
         }

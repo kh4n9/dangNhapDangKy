@@ -19,5 +19,8 @@ namespace dangNhapDangKy.Models
 
         [DataType(DataType.Currency)]
         public decimal UnitPrice { get; set; }
+
+        // Thêm trường Size vào OrderItem
+        public string Size { get; set; }
     }
 }

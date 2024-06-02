@@ -28,6 +28,7 @@
                             <thead>
                                 <tr>
                                     <th>Tên sản phẩm</th>
+                                    <th>Size</th>
                                     <th>Số lượng</th>
                                     <th>Giá</th>
                                 </tr>
@@ -37,8 +38,16 @@
                                 {
                                     <tr>
                                         <td>@item.Product.Name</td>
+                                        <td>@item.Size</td>
                                         <td>@item.Quantity</td>
-                                        <td>@item.Product.Price.ToString("C")</td>
+                                        <td>
+                                            @using System.Globalization
+                                            @{
+                                                var vietnamCulture = new CultureInfo("vi-VN");
+                                                var formattedPrice = item.Product.Price.ToString("c", vietnamCulture);
+                                            }
+                                            <p>@formattedPrice</p>
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
