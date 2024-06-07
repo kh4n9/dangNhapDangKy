@@ -21,15 +21,22 @@ namespace dangNhapDangKy.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(String? searchString)
         {
-            var products = _context.Products.Include("Category").Include("Brand").ToList();
-            return View(products);
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
+            if (searchString == null)
+            {
+                var products = _context.Products.Include("Category").Include("Brand").ToList();
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Brands = _context.Brands.ToList();
+                return View(products);
+            }
+            else
+            {
+                var products = _context.Products.Where(p => p.Name.Contains(searchString) || p.Brand.Name.Contains(searchString) || p.Category.Name.Contains(searchString)).Include("Category").Include("Brand").ToList();
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Brands = _context.Brands.ToList();
+                return View(products);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -84,6 +91,57 @@ namespace dangNhapDangKy.Controllers
                 .ToListAsync();
 
             return View(orders);
+        }
+        // Hiển thị sản phẩm theo loại sản phẩm
+        public IActionResult ByCategory()
+        {
+            var products = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .ToList();
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
+            return View(products);
+        }
+
+        // hiển thị tất cả sản phẩm theo loại khi chọn trên dropdown
+        public IActionResult FindOneCategory(int? id)
+        {
+            var products = _context.Products
+                    .Where(p => p.CategoryId == id)
+                    .Include(p => p.Brand)
+                    .Include(p => p.Category)
+                    .ToList();
+            ViewBag.Category = _context.Categories.Where(c => c.Id == id).FirstOrDefault();
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
+            return View(products);
+        }
+
+        // Hiển thị sản phẩm theo thương hiệu
+        public IActionResult ByBrand()
+        {
+            var products = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .ToList();
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
+            return View(products);
+        }
+
+        // hiển thị tất cả sản phẩm theo thương hiệu khi chọn trên dropdown
+        public IActionResult FindOneBrand(int? id)
+        {
+            var products = _context.Products
+                    .Where(p => p.BrandId == id)
+                    .Include(p => p.Brand)
+                    .Include(p => p.Category)
+                    .ToList();
+            ViewBag.Brand = _context.Brands.Where(b => b.Id == id).FirstOrDefault();
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
+            return View(products);
         }
     }
 }

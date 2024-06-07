@@ -23,7 +23,14 @@
                     <div class="mt-2 pr-3 content">
                         <p>@Model.Description</p>
                     </div>
-                    <h3>@Model.Price.ToString("C")</h3>
+                    <h3>
+                        @using System.Globalization
+                        @{
+                            var vietnamCulture = new CultureInfo("vi-VN");
+                            var formattedPrice = Model.Price.ToString("c", vietnamCulture);
+                        }
+                        <p>@formattedPrice</p>
+                    </h3>
                     <div class="ratings d-flex flex-row align-items-center">
                         <div class="d-flex flex-row">
                             <i class='bx bxs-star'></i>
@@ -36,7 +43,7 @@
                     </div>
                     
                     <div class="buttons d-flex flex-row mt-5 gap-3">
-                        <a asp-action="AddToCart" asp-controller="Cart" asp-route-productId="@Model.Id"><button class="btn btn-dark">Add to Cart</button></a>
+                        <a asp-action="AddToCart" asp-controller="Cart" asp-route-productId="@Model.Id"><button class="btn btn-dark">Thêm vào Giỏ hàng</button></a>
                     </div>
                     
                 </div>

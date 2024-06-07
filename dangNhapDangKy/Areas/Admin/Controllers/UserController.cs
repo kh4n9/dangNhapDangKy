@@ -55,6 +55,60 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
             }
             return RedirectToAction(nameof(Index));
         }
-    
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(string id, [Bind("Id,Email")] IdentityUser user)
+        {
+            if (id != user.Id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var existingUser = await _userManager.FindByIdAsync(id);
+                    if (existingUser == null)
+                    {
+                        return NotFound();
+                    }
+
+                    existingUser.Email = user.Email;
+                    await _userManager.UpdateAsync(existingUser);
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!_userManager.Users.Any(u => u.Id == id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(user);
+        }
+
     }
 }

@@ -1,5 +1,5 @@
-﻿@model IEnumerable<dangNhapDangKy.Models.Product>
-
+﻿@model X.PagedList.IPagedList<dangNhapDangKy.Models.Product>
+@using X.PagedList.Mvc.Core;
 @{
     ViewData["Title"] = "Danh sách";
     Layout = "~/Areas/Admin/Views/Shared/AdminLayout.cshtml";
@@ -7,30 +7,29 @@
 
 <h1>Danh sách</h1>
 
+<form asp-area="Admin" asp-controller="Products" asp-action="Index" method="get">
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm" name="searchString" value="@ViewData["CurrentFilter"]" aria-label="Tìm kiếm sản phẩm" aria-describedby="basic-addon2">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0" />
+                </svg>
+            </button>
+        </div>
+    </div>
+</form>
+
 <table class="table">
     <thead>
         <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Category)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Brand)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Image)
-            </th>
-            <th>
-                Sizes
-            </th>
+            <th>Tên</th>
+            <th>Mô tả</th>
+            <th>Giá</th>
+            <th>Loại</th>
+            <th>Thương hiệu</th>
+            <th>Hình ảnh</th>
+            <th>Kích cỡ</th>
             <th></th>
         </tr>
     </thead>
@@ -38,11 +37,9 @@
         @foreach (var item in Model)
         {
             <tr>
+                <td>@Html.DisplayFor(modelItem => item.Name)</td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
+                    <p class="text-truncate" style="max-width: 300px;">@Html.DisplayFor(modelItem => item.Description)</p>
                 </td>
                 <td>
                 @using System.Globalization
@@ -52,23 +49,18 @@
                     }
                     <p>@formattedPrice</p>
                 </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Category.Name)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Brand.Name)
-                </td>
+                <td>@Html.DisplayFor(modelItem => item.Category.Name)</td>
+                <td>@Html.DisplayFor(modelItem => item.Brand.Name)</td>
                 <td>
                     <img src=@item.Image alt="@item.Name" style="width:150px;height:150px;" />
                 </td>
                 <td>
-                    <!-- Hiển thị danh sách size -->
                     @if (item.Sizes != null && item.Sizes.Count > 0)
                     {
-                        <ul>
+                        <ul class="list-group">
                             @foreach (var size in item.Sizes)
                             {
-                                <li>@size.Name</li>
+                                <li class="list-group-item">@size.Name</li>
                             }
                         </ul>
                     }
@@ -78,11 +70,34 @@
                     }
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Chỉnh sửa</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Chi tiết</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Xóa</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><button class="btn btn-success">Chỉnh sửa</button></a>
+                    <a asp-action="Details" asp-route-id="@item.Id"><button class="btn btn-info">Chi tiết</button></a>
+                    <a asp-action="Delete" asp-route-id="@item.Id"><button class="btn btn-danger">Xóa</button></a>
                 </td>
             </tr>
         }
     </tbody>
 </table>
+
+<div class="d-flex justify-content-around p-3 bd-highlight">
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchString = ViewData["CurrentFilter"] }), new PagedListRenderOptions
+{
+    DisplayLinkToFirstPage = PagedListDisplayMode.Always,
+    DisplayLinkToLastPage = PagedListDisplayMode.Always,
+    DisplayLinkToPreviousPage = PagedListDisplayMode.Always,
+    DisplayLinkToNextPage = PagedListDisplayMode.Always,
+    DisplayLinkToIndividualPages = true,
+    DisplayPageCountAndCurrentLocation = false,
+    MaximumPageNumbersToDisplay = 5,
+    DisplayEllipsesWhenNotShowingAllPageNumbers = true,
+    EllipsesFormat = "&#8230;",
+    LinkToFirstPageFormat = "Trang đầu",
+    LinkToPreviousPageFormat = "Trước",
+    LinkToIndividualPageFormat = "{0}",
+    LinkToNextPageFormat = "Tiếp",
+    LinkToLastPageFormat = "Trang cuối",
+    PageClasses = new[] { "page-link" },
+    UlElementClasses = new[] { "pagination" },
+    LiElementClasses = new[] { "page-item" }
+})
+</div>
