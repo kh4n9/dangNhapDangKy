@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using dangNhapDangKy.Data;
 using dangNhapDangKy.Models;
 using Microsoft.AspNetCore.Authorization;
+using X.PagedList;
 
 namespace dangNhapDangKy.Areas.Admin.Controllers
 {
@@ -23,10 +24,25 @@ namespace dangNhapDangKy.Areas.Admin.Controllers
         }
 
         // GET: Admin/Products
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int? page)
         {
-            var applicationDbContext = _context.Products.Include(p => p.Brand).Include(p => p.Category).Include(p => p.Sizes);
-            return View(await applicationDbContext.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+
+            var products = from p in _context.Products
+                           .Include(p => p.Brand)
+                           .Include(p => p.Category)
+                           .Include(p => p.Sizes)
+                           select p;
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => p.Name.Contains(searchString));
+            }
+
+            int pageSize = 4;
+            int pageNumber = (page ?? 1);
+
+            return View(await products.ToPagedListAsync(pageNumber, pageSize));
         }
 
         // GET: Admin/Products/Details/5

@@ -85,5 +85,26 @@ namespace dangNhapDangKy.Controllers
 
             return View(orders);
         }
+        // Hiển thị sản phẩm theo loại sản phẩm
+        public IActionResult ByCategory()
+        {
+            var products = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .ToList();
+            ViewBag.Categories = _context.Categories.ToList();
+            return View(products);
+        }
+
+        // Hiển thị sản phẩm theo thương hiệu
+        public IActionResult ByBrand()
+        {
+            var products = _context.Products
+                .Include(p => p.Brand)
+                .Include(p => p.Category)
+                .ToList();
+            ViewBag.Brands = _context.Brands.ToList();
+            return View(products);
+        }
     }
 }

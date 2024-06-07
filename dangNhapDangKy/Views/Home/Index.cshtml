@@ -13,8 +13,8 @@
                     <div class="btn-group">
                         <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">Xếp theo</button>
                         <div class="dropdown-menu dropdown-menu-right">
-                            <a class="dropdown-item" href="#">Mới nhất</a>
-                            <a class="dropdown-item" href="#">Phổ biến</a>
+                            <a class="dropdown-item" asp-controller="Home" asp-action="ByBrand">Thương hiệu</a>
+                            <a class="dropdown-item" asp-controller="Home" asp-action="ByCategory">Loại sản phẩm</a>
                             <a class="dropdown-item" href="#">Đánh giá tốt nhất</a>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     </div>
 
                     <div class="text-center py-4">
-                        <a asp-controller="Home" asp-action="Details" asp-route-Id="@item.Id" class="h6 text-decoration-none text-truncate">@item.Name</a><br /><br />
+                        <a asp-controller="Home" asp-action="Details" asp-route-Id="@item.Id" title="@item.Name"><p class="h6 text-decoration-none text-truncate">@item.Name</p></a><br /><br />
                         <p class="p text-decoration-none text-truncate" href="">Danh Mục: @item.Category.Name</p>
                         <p class="p text-decoration-none text-truncate" href="">Nhãn Hiệu: @item.Brand.Name</p>
                         <div class="d-flex align-items-center justify-content-center mt-2">

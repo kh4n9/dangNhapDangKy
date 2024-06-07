@@ -77,6 +77,16 @@
                             <a asp-area="" asp-controller="Home" asp-action="" class="nav-item nav-link active">Trang Chủ</a>
                             <a asp-area="" asp-controller="Cart" asp-action="" class="nav-item nav-link active">Giỏ hàng</a>
                             <a asp-area="" asp-controller="Home" asp-action="OrderHistory" class="nav-item nav-link active">Lịch sử mua hàng</a>
+                                <div class="dropdown">
+                                    <button class="nav-item nav-link active dropdown-toggle bg-dark" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Dropdown button
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                        <a class="dropdown-item" href="#">Action</a>
+                                        <a class="dropdown-item" href="#">Another action</a>
+                                        <a class="dropdown-item" href="#">Something else here</a>
+                                    </div>
+                                </div>
                             @* <a asp-controller="Ai" asp-action="" class="nav-item nav-link active">GPT</a> *@
                             @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                             {
