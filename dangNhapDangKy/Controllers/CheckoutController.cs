@@ -22,6 +22,8 @@ namespace dangNhapDangKy.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
             var cart = GetCart();
             if (cart.Items.Count == 0)
             {
@@ -35,6 +37,8 @@ namespace dangNhapDangKy.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(CheckoutViewModel model)
         {
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
             if (ModelState.IsValid)
             {
                 var cart = GetCart();
@@ -99,6 +103,8 @@ namespace dangNhapDangKy.Controllers
 
         public IActionResult OrderConfirmation(int orderId)
         {
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
             var order = _context.Orders.Include(o => o.OrderItems).ThenInclude(oi => oi.Product)
                                        .FirstOrDefault(o => o.Id == orderId);
 

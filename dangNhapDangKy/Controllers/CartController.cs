@@ -21,6 +21,8 @@ namespace dangNhapDangKy.Controllers
 
         public async Task<IActionResult> Index()
         {
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
             var cart = GetCart();
             foreach (var item in cart.Items)
             {
