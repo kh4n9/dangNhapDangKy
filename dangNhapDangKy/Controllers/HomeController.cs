@@ -21,12 +21,22 @@ namespace dangNhapDangKy.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(String? searchString)
         {
-            var products = _context.Products.Include("Category").Include("Brand").ToList();
-            ViewBag.Categories = _context.Categories.ToList();
-            ViewBag.Brands = _context.Brands.ToList();
-            return View(products);
+            if (searchString == null)
+            {
+                var products = _context.Products.Include("Category").Include("Brand").ToList();
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Brands = _context.Brands.ToList();
+                return View(products);
+            }
+            else
+            {
+                var products = _context.Products.Where(p => p.Name.Contains(searchString) || p.Brand.Name.Contains(searchString) || p.Category.Name.Contains(searchString)).Include("Category").Include("Brand").ToList();
+                ViewBag.Categories = _context.Categories.ToList();
+                ViewBag.Brands = _context.Brands.ToList();
+                return View(products);
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
