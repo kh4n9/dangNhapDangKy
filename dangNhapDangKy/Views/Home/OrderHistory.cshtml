@@ -53,7 +53,14 @@
                             </tbody>
                         </table>
                     </td>
-                    <td>@order.TotalPrice.ToString("C")</td>
+                    <td>
+                        @using System.Globalization
+                        @{
+                            var vietnamCulture1 = new CultureInfo("vi-VN");
+                            var formattedPrice1 = @order.TotalPrice.ToString("c", vietnamCulture1);
+                        }
+                        <p>@formattedPrice1</p>
+                    </td>
                 </tr>
             }
         </tbody>
