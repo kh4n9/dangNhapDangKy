@@ -47,6 +47,8 @@ namespace dangNhapDangKy.Controllers
 
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
             if (id == null)
             {
                 return NotFound();
@@ -66,6 +68,8 @@ namespace dangNhapDangKy.Controllers
         [Authorize] // Yêu cầu người dùng đã đăng nhập
         public async Task<IActionResult> OrderHistory()
         {
+            ViewBag.Categories = _context.Categories.ToList();
+            ViewBag.Brands = _context.Brands.ToList();
             // Lấy thông tin về người dùng đã đăng nhập
             /*var user = await _userManager.GetUserAsync(User);*/
             string username = null;

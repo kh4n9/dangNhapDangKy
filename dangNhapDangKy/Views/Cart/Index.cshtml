@@ -34,10 +34,10 @@ else
                     </td>
                     <td>
                         <select name="sizeId" class="form-control size-dropdown" data-product-id="@item.ProductId">
+                            <option>---Vui lòng chọn size---</option>
                             @foreach (var size in item.Product.Sizes)
                             {
-                                var selected = size.Name == item.Size ? "selected" : "";
-                                <option value="@size.Name" selected="@selected">@size.Name</option>
+                                <option value="@size.Name">@size.Name</option>
                             }
                         </select>
                     </td>
